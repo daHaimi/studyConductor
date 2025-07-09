@@ -1,0 +1,98 @@
+# General configuration
+study:
+  name: Intrinsic Gestures for Bidirectional Communication with AVs
+  storage:
+    # Partition UID of the USB drive
+    id: e9bd37e5-842a-4eb5-83ab-0e4d10eb45fc
+    # Storage path for shared drives
+    path: study
+#   local: true # Sets storage to the local filesystem
+modules:
+  # Database configuration
+  - name: Study Database
+    type: docker
+    configuration:
+      CONTAINER_NAME: tsdb
+      IMAGE_NAME: timescale/timescaledb:latest-pg16
+      DATA_PATH: /var/lib/postgresql/data
+      PORT_MAPPING:
+        - "8432:5432"
+      ENV:
+        POSTGRES_PASSWORD: foobar
+        PGDATA: /var/lib/postgresql/data/pgdata
+  # Broker configuration
+  - name: Persisting Broker
+    type: binary
+    configuration:
+      oneshot: false
+      BINARY_PATH: /home/haimi/Projects/viveSyncBroker/viveSyncBroker
+      WORKING_DIR: /home/haimi/Projects/viveSyncBroker
+  # Latin Squirt configuration
+  - name: Latin Squirt
+    type: binary
+    configuration:
+      BINARY_PATH: /home/haimi/Dokumente/Forschung/phd/repos/latin-squirt/out/latin-squirt-linux-x64/latin-squirt
+      BINARY_ARGS:
+        - '--port: 8357'
+        - '--pairs: 2'
+  # Local TLX Server configuration
+  - name: Survey Server
+    type: binary
+    configuration:
+      oneshot: false
+      BINARY_PATH: /usr/local/bin/node
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/repos/local-tlx
+      BINARY_ARGS:
+        - 'index.js'
+  # Connect to Pico via adb
+  - name: Connect to Pico
+    type: binary
+    depends:
+      - Persisting Broker
+    configuration:
+      oneshot: true
+      terminal: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/connect.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+  # Connect to Pico via adb
+  - name: Start App on Pico
+    type: binary
+    depends:
+      - Persisting Broker
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/start_study.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+  # Start screen recording
+  - name: Screen Recording
+    type: binary
+    depends:
+      - Persisting Broker
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/screenrecord.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+      BINARY_ARGS:
+        - 'start'
+  # Stop screen recording
+  - name: Stop Screen Recording
+    type: binary
+    depends:
+      - Persisting Broker
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/screenrecord.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+      BINARY_ARGS:
+        - 'stop'
+  # Start adb keepawake
+  - name: Android Coffee (Keepawake)
+    type: binary
+    depends:
+      - Persisting Broker
+    configuration:
+      nohup: true
+      oneshot: false
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/keepawake.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+
