@@ -1,0 +1,79 @@
+# General configuration
+study:
+  name: Demo Setup for MuC25
+  storage:
+    # Partition UID of the USB drive
+    id: A087-064A
+    # Storage path for shared drives
+    path: recordings
+#   local: true # Sets storage to the local filesystem
+modules:
+  # Connect to Pico via adb
+  - name: Connect to Pico
+    type: binary
+    configuration:
+      oneshot: true
+      terminal: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/connect.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+  # Start adb keepawake
+  - name: Android Coffee (Keepawake)
+    type: binary
+    configuration:
+      nohup: true
+      oneshot: false
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/keepawake.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+  # Broker configuration
+  - name: Broker
+    type: binary
+    configuration:
+      oneshot: false
+      BINARY_PATH: /home/haimi/Projects/viveSyncBroker/viveSyncBroker
+      WORKING_DIR: /home/haimi/Projects/viveSyncBroker
+  # Start Gesture Recognizer
+  - name: Start Gesture Recognizer
+    type: binary
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/gesture.sh
+      WORKING_DIR: /home/haimi/Projects/CustomPose-Classification-Mediapipe
+  # Start App on Pico via adb
+  - name: Start App on Pico
+    type: binary
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/start_study.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+      BINARY_ARGS:
+        - 'start'
+        - 'com.thi.hcig.GesturesDemo'
+  # Stop App on Pico via adb
+  - name: Stop App on Pico
+    type: binary
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/start_study.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+      BINARY_ARGS:
+        - 'stop'
+        - 'com.thi.hcig.GesturesDemo'
+  # Start screen recording
+  - name: Screen Recording
+    type: binary
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/screenmirror.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+      BINARY_ARGS:
+        - 'start'
+  # Stop screen recording
+  - name: Stop Screen Recording
+    type: binary
+    configuration:
+      oneshot: true
+      BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/screenmirror.sh
+      WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/papers/2025-hitl
+      BINARY_ARGS:
+        - 'stop'
+

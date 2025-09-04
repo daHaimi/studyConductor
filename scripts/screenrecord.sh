@@ -1,7 +1,12 @@
 #!/bin/bash
 
-UNITY_PATH=/home/haimi/Unity/Hub/Editor/
+###
+# Screen Mirroring using https://github.com/Genymobile/scrcpy
+###
+
 UNITY_VERSION=2022.3.44f1
+
+UNITY_PATH=${HOME}/Unity/Hub/Editor/
 ANDROID_SDK_PATH=${UNITY_PATH}/${UNITY_VERSION}/Editor/Data/PlaybackEngines/AndroidPlayer/SDK
 ADB=${ANDROID_SDK_PATH}/platform-tools/adb
 

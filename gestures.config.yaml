@@ -63,6 +63,9 @@ modules:
       oneshot: true
       BINARY_PATH: /home/haimi/Projects/studyConductor/scripts/start_study.sh
       WORKING_DIR: /home/haimi/Dokumente/Forschung/phd/Studien/2023-gestures
+      BINARY_ARGS:
+        - 'start'
+        - 'com.thi.hcig.GesturesStudy'
   # Start screen recording
   - name: Screen Recording
     type: binary
